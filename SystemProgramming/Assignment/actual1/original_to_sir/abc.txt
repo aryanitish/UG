@@ -1,0 +1,6 @@
+definition:
+	matrix = m<3,3>
+	centre = m<1,1>
+	end = m<2,2>
+	BEGIN = m<0,0>
+END

@@ -1,0 +1,34 @@
+  library(imager)
+img <- matrix(c(1,0,0, 0,0,0, 0,0,0), nrow = 3, ncol = 3)
+imgMat <- img
+
+m <- nrow(imgMat)
+n <- ncol(imgMat)
+
+padingMat <- matrix(0L, nrow = m+2, ncol = n+2)
+
+for(i in 1:m) {
+  for(j in 1:n) {
+    padingMat[i+1, j+1] = imgMat[i, j]
+  }
+}
+
+View(padingMat)
+
+
+dilatedImage <- padingMat
+erodedImage <- padingMat
+
+filter <- matrix(c(0,0,0,0,0, 0,0,0,0,0, 0,0,1,1,1, 0,0,1,0,0, 0,0,1,0,0), nrow = 5, ncol = 5)
+
+plot(as.cimg(padingMat))
+
+View(filter)
+
+sumPixelMul <- padingMat * filter
+
+View(sumPixelMul)
+
+dilatedImage <- sumPixelMul
+
+plot(as.cimg(dilatedImage))

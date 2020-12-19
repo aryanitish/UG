@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1591356428980.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3811244379",
+    "id" : "7D37B4F4",
+    "lastKnownWriteTime" : 1591381431,
+    "last_content_update" : 1591381431108,
+    "path" : "~/Desktop/R_stuff/DataSc/PracAsgn/Question1_Set1_2017CSC1061.R",
+    "project_path" : "Question1_Set1_2017CSC1061.R",
+    "properties" : {
+        "cursorPosition" : "93,0",
+        "notebook_format" : "pdf_document",
+        "scrollLine" : "84",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

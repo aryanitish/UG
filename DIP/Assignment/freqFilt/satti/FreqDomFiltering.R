@@ -1,0 +1,99 @@
+library(imager)
+img=load.image("/home/nitish/Desktop/DIP/specAssgn/32347610-Digital Image Processing/Images/panda.png")
+plot(img,main="Original image")
+img.mat=as.matrix(img)
+p=2^ceiling(log2(nrow(img.mat)))
+q=2^ceiling(log2(ncol(img.mat)))
+img.padded=matrix(0,p,q)
+for(i in 1:nrow(img.mat))
+{
+  for(j in 1:ncol(img.mat))
+  {
+    img.padded[i,j]=img.mat[i,j]
+  }
+}
+plot(as.cimg(img.padded),main="Padded image")
+#mutiply (-1)
+for(i in 1:nrow(img.padded))
+{
+  for(j in 1:ncol(img.padded))
+  {
+    img.padded[i,j]=img.padded[i,j]*((-1)^(i+j))
+  }
+}
+plot(as.cimg(img.padded),main="After center")
+img.padded.fft=FFT(as.cimg(img.padded))
+plot(img.padded.fft$real)
+plot(img.padded.fft$imag)
+filter.padded=matrix(0,p,q)
+#butterworth
+# for(i in 1:nrow(filter.padded))
+# {
+#   for(j in 1:ncol(filter.padded))
+#   {
+#     dist=sqrt((i-(p/2))^2+(j-(q/2))^2)  
+#     d.not = 50
+#     # filter.padded[i,j]=1/(1+(d.not/dist)^(2*2))#butterworth high pass
+#     filter.padded[i,j]=1/(1+(dist/d.not)^(2*2))#butterworth low pass
+#   }
+# }
+
+# ideal filters
+for(i in 1:nrow(filter.padded))
+{
+  for(j in 1:ncol(filter.padded))
+  {
+    dist=sqrt((i-(p/2))^2+(j-(q/2))^2)
+    d.not = 37
+    if(dist <= d.not)   #ideal low pass
+      filter.padded[i,j] = 1
+    else
+      filter.padded[i,j] = 0
+
+     # if(dist <= d.not) #ideal high pass
+     #   filter.padded[i,j] = 0
+     # else
+     #   filter.padded[i,j] = 1
+  }
+}
+# 
+# #gaussian filter
+# for(i in 1:nrow(filter.padded))
+# {
+#     for(j in 1:ncol(filter.padded))
+#     {
+#       d.not = 50
+#       dist=sqrt((i-(p/2))^2+(j-(q/2))^2)
+#       filter.padded[i,j]=1 - exp(-(dist^2)/(2*(d.not^2)))#gaussian high pass
+#       # filter.padded[i,j]=exp(-(dist^2)/(2*(d.not^2)))#gaussian low pass
+#     }
+# }
+
+plot(as.cimg(filter.padded))
+
+final=Map("*",list(as.cimg(filter.padded)),img.padded.fft)
+names(final)=c("real","imaginary")
+final.fft=FFT(final$real,final$imag,inverse = TRUE)
+plot(final.fft$real)
+final.fft.mat=as.matrix(final.fft$real)
+#real mul -1
+for(i in 1:nrow(final.fft.mat))
+{
+  for(j in 1:ncol(final.fft.mat))
+  {
+    final.fft.mat[i,j]=final.fft.mat[i,j]*((-1)^(i+j))
+  }
+}
+plot(as.cimg(final.fft.mat))
+final.cropped=matrix(0,nrow(img),ncol(img))
+for(i in 1:nrow(final.cropped))
+{
+  for(j in 1:ncol(final.cropped))
+  {
+    final.cropped[i,j]=final.fft.mat[i,j]
+    
+  }
+}
+plot(img,main = "main img")
+plot(as.cimg(final.cropped),main = "filtered")
+save.image(as.cimg(final.cropped),"/home/nitish/Desktop/DIP/specAssgn/32347610-Digital Image Processing/Images/pandaR.png")

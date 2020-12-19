@@ -1,0 +1,35 @@
+%{
+#include <stdio.h>
+int no_of_lines = 0;
+int no_of_chars = 0;
+%}
+
+%%
+[ \t]	;
+\n	{ 
+	  no_of_lines++;
+	  no_of_chars++;
+	}
+.	{ 
+	  no_of_chars++;
+	}
+%%
+
+extern FILE *yyin;
+
+int main(int argc,char *argv[])
+{	
+	//this is a sigle line comment.
+	/* this is a multiline comment
+	*abcdefghijkl
+	*over
+	*/
+	if(argc > 1)
+	{
+		yyin = *argv[1];
+	}
+	else
+		printf("File name not found");
+	yylex();
+        return 0;
+}

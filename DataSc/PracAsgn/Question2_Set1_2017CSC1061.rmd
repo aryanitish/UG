@@ -1,0 +1,43 @@
+---
+title: "Age vs Gender variation countrywise"
+output: html_document
+---
+
+```{r}
+# QUESTION 2
+# RESEARCH PROBLEM ----
+# ANALYSE age vs gender variations for different countries
+
+# ALL EXTERNAL PACKAGES ----
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+
+# Setting Directory and Reading csv 
+# Filling NA in place of blanks in the cell ----
+setwd("/home/nitish/Desktop/R_stuff/DataSc/PracAsgn")
+covid <- read.csv("Covid_dataset2020.csv", header = TRUE, na.strings = c("",NA))
+as_tibble(covid)
+
+#Formatting all date columns of the format mm/dd/yyyy(total 7 columns) ----
+covid2 <- covid %>% 
+  mutate_at(vars(reporting_date, symptom_onset, visit_date_hosp, 
+         exposure_startdate, exposure_enddate, death, recovered), mdy)
+write.csv(covid2,  "CleanData.csv")
+#Grouping by country to create a facet map depicting various parameters ----
+covid %>% 
+  group_by(country) %>% 
+  select(country, case_in_country, age, gender) %>% 
+  filter_all(any_vars(!is.na(.))) %>% 
+  ggplot() +
+  geom_point(mapping = aes(x = gender, y = age)) +
+  facet_wrap(vars(country))
+
+# Variance of case_in_country with age for each country ----
+covid %>% 
+  group_by(country) %>% 
+  select(country, case_in_country, age, gender) %>% 
+  filter_all(any_vars(!is.na(.))) %>% 
+  summarise(correlation_age_cases = var(age, case_in_country, na.rm = TRUE))
+```
